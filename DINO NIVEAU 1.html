@@ -1,76 +1,38 @@
-
-<!DOCTYPE html>
+<!doctype html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>TOTORINA - DINO LVL 1</title>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>TOTORINA — DINO LVL 1</title>
 <style>
-body {
-  background: #090716;
-  color: white;
-  font-family: Arial, sans-serif;
-  text-align: center;
-  padding: 40px 15px;
-}
-h1 { color: #ff32c8; }
-a { color: #17baff; }
-button {
-  padding: 12px 20px;
-  background: #ff32c8;
-  color: white;
-  border: 0;
-  border-radius: 10px;
-  cursor: pointer;
-}
-input { padding: 12px; border-radius: 8px; }
-.groupe {
-  background: #201733;
-  padding: 15px;
-  margin: 15px auto;
-  border-radius: 12px;
-  max-width: 500px;
-}
+:root{color-scheme:dark}*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top,#25114b,#090814 65%);color:#f7f3ff;font:16px system-ui,Arial,sans-serif;min-height:100vh}header,main{max-width:1060px;margin:auto;padding:22px}header{display:flex;justify-content:space-between;align-items:center;gap:15px;flex-wrap:wrap}a{color:#9bdcff}h1{font-size:clamp(2rem,5vw,3.4rem);margin:14px 0;color:#f868dc}h2{margin-top:0}.panel,.group{background:#1a1531;border:1px solid #493366;border-radius:17px;padding:20px;margin:18px 0;box-shadow:0 8px 30px #0003}.muted{color:#c9bbdf}input,button{font:inherit;border-radius:9px;padding:11px 14px}input{background:#0c0a1d;border:1px solid #6c588c;color:white;max-width:100%;width:280px}input[type=file]{width:100%;max-width:400px}button{border:0;background:#e94ac5;color:#170c25;font-weight:750;cursor:pointer;margin:4px}button.secondary{background:#75d9ff}button.danger{background:#ff8d9c}button:disabled{opacity:.55;cursor:wait}.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:15px;margin-top:18px}.photo{background:#0e0b1e;border-radius:12px;overflow:hidden}.photo img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block}.photo .actions{padding:7px}#status{min-height:1.5em}#adminPanel[hidden],#loginPanel[hidden],#logoutBtn[hidden],.adminOnly[hidden]{display:none!important}small{color:#d4c9e8}
 </style>
 </head>
 <body>
-<a href="index.html">← Retour à TOTORINA</a>
-<h1>🦖 DINO LVL 1</h1>
-<p>Mes groupes de dinos ARK</p>
-<input id="nom" placeholder="Nom du groupe">
-<button onclick="ajouter()">Ajouter un groupe</button>
-<div id="groupes"></div>
+<header><a href="index.html">← Retour à TOTORINA</a><button id="logoutBtn" class="secondary" hidden>Déconnexion admin</button></header>
+<main><h1>🦖 DINO LVL 1</h1><p class="muted">Les groupes de dinos et leurs photos — galerie TOTORINA</p>
+<section class="panel" id="loginPanel"><h2>🔒 Connexion administrateur</h2><p class="muted">Seul le propriétaire peut ajouter ou supprimer des groupes et photos.</p><form id="loginForm" class="row"><input id="email" type="email" autocomplete="username" placeholder="Adresse e-mail" required><input id="password" type="password" autocomplete="current-password" placeholder="Mot de passe" required><button type="submit">Se connecter</button></form></section>
+<section class="panel" id="adminPanel" hidden><h2>➕ Créer un groupe de dinos</h2><form id="groupForm" class="row"><input id="groupName" maxlength="100" placeholder="Ex. Rex, Giga, Carcha…" required><button type="submit">Créer le groupe</button></form></section>
+<p id="status" role="status" aria-live="polite"></p><section id="groups" aria-label="Groupes de dinos"><p>Chargement des groupes…</p></section>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script>
-let groupes = JSON.parse(localStorage.getItem("dinos") || "[]");
-function afficher() {
-  document.getElementById("groupes").innerHTML = "";
-  groupes.forEach((nom, i) => {
-    const div = document.createElement("div");
-    div.className = "groupe";
-    div.textContent = "🦖 " + nom + " ";
-    const bouton = document.createElement("button");
-    bouton.textContent = "Supprimer";
-    bouton.onclick = () => {
-      groupes.splice(i, 1);
-      sauvegarder();
-    };
-    div.appendChild(bouton);
-    document.getElementById("groupes").appendChild(div);
-  });
-}
-function sauvegarder() {
-  localStorage.setItem("dinos", JSON.stringify(groupes));
-  afficher();
-}
-function ajouter() {
-  const input = document.getElementById("nom");
-  const nom = input.value.trim();
-  if (!nom) return;
-  groupes.push(nom);
-  input.value = "";
-  sauvegarder();
-}
-afficher();
+'use strict';
+const PROJECT_URL='https://yheehdmztfetkpqmfkjn.supabase.co';
+const PUBLISHABLE_KEY='sb_publishable_SAC1oCgrzZgRlHjVSZDx4g_tzOR5mdM';
+const ADMIN_UID='dda51d68-bd1e-4f7c-89b4-4cfdc98cc527';
+const BUCKET='dino-photos';
+const statusEl=document.getElementById('status');
+const groupsEl=document.getElementById('groups');
+let db,admin=false;
+function status(message){statusEl.textContent=message||''}
+function make(tag,props={},text){const e=document.createElement(tag);Object.assign(e,props);if(text!==undefined)e.textContent=text;return e}
+function btn(text,handler,cls=''){const b=make('button',{type:'button',className:cls},text);b.addEventListener('click',handler);return b}
+async function refreshAuth(){const {data,error}=await db.auth.getUser();if(error&&error.name!=='AuthSessionMissingError')console.warn(error.message);admin=data?.user?.id===ADMIN_UID;document.getElementById('loginPanel').hidden=admin;document.getElementById('adminPanel').hidden=!admin;document.getElementById('logoutBtn').hidden=!data?.user;await loadGroups()}
+async function loadGroups(){groupsEl.replaceChildren(make('p',{},'Chargement…'));const {data:groups,error}=await db.from('dino_groups').select('id,name,created_at').order('created_at',{ascending:false});if(error){groupsEl.replaceChildren(make('p',{},'Impossible de charger les groupes : '+error.message));return}groupsEl.replaceChildren();if(!groups.length){groupsEl.append(make('p',{},'Aucun groupe pour le moment.'));return}for(const g of groups){const section=make('section',{className:'group'});const heading=make('h2',{},'🦖 '+g.name);section.append(heading);if(admin){section.append(btn('Supprimer le groupe',()=>deleteGroup(g),'danger'));const form=make('form',{className:'row'});const upload=make('input',{type:'file',accept:'image/jpeg,image/png,image/webp',multiple:true,required:true});const submit=make('button',{type:'submit'},'📷 Ajouter des photos');form.append(upload,submit);form.addEventListener('submit',async e=>{e.preventDefault();const files=Array.from(upload.files||[]);if(!files.length)return;submit.disabled=true;try{for(const file of files){if(!['image/jpeg','image/png','image/webp'].includes(file.type))throw Error('Format autorisé : JPG, PNG ou WebP');if(file.size>10*1024*1024)throw Error('Photo trop grande (maximum 10 Mo)');const ext=file.type==='image/png'?'png':file.type==='image/webp'?'webp':'jpg';const path=g.id+'/'+crypto.randomUUID()+'.'+ext;const up=await db.storage.from(BUCKET).upload(path,file,{contentType:file.type,upsert:false});if(up.error)throw up.error;const saved=await db.from('dino_photos').insert({group_id:g.id,storage_path:path});if(saved.error){await db.storage.from(BUCKET).remove([path]);throw saved.error}}status('Photos ajoutées !');await loadGroups()}catch(err){status('Erreur : '+err.message)}finally{submit.disabled=false}});section.append(form)}const gallery=make('div',{className:'gallery'});const {data:photos,error:photoErr}=await db.from('dino_photos').select('id,storage_path').eq('group_id',g.id).order('created_at',{ascending:false});if(photoErr){gallery.append(make('p',{},'Erreur photos : '+photoErr.message))}else if(!photos.length){gallery.append(make('p',{className:'muted'},'Pas encore de photos.'))}else for(const p of photos){const tile=make('div',{className:'photo'});const url=db.storage.from(BUCKET).getPublicUrl(p.storage_path).data.publicUrl;const img=make('img',{src:url,alt:'Photo de dinosaure du groupe '+g.name,loading:'lazy'});tile.append(img);if(admin){const actions=make('div',{className:'actions'});actions.append(btn('🗑️ Supprimer la photo',()=>deletePhoto(p),'danger'));tile.append(actions)}gallery.append(tile)}section.append(gallery);groupsEl.append(section)}}
+async function deletePhoto(p){if(!confirm('Supprimer cette photo ?'))return;const removed=await db.storage.from(BUCKET).remove([p.storage_path]);if(removed.error){status('Erreur : '+removed.error.message);return}const del=await db.from('dino_photos').delete().eq('id',p.id);if(del.error){status('Erreur : '+del.error.message);return}status('Photo supprimée.');await loadGroups()}
+async function deleteGroup(g){if(!confirm('Supprimer le groupe « '+g.name+' » et toutes ses photos ?'))return;const {data:photos,error:e}=await db.from('dino_photos').select('storage_path').eq('group_id',g.id);if(e){status('Erreur : '+e.message);return}if(photos?.length){const removed=await db.storage.from(BUCKET).remove(photos.map(p=>p.storage_path));if(removed.error){status('Erreur : '+removed.error.message);return}}const del=await db.from('dino_groups').delete().eq('id',g.id);if(del.error){status('Erreur : '+del.error.message);return}status('Groupe supprimé.');await loadGroups()}
+async function init(){if(!window.supabase){status('La bibliothèque Supabase ne s’est pas chargée. Vérifie ta connexion internet.');return}db=window.supabase.createClient(PROJECT_URL,PUBLISHABLE_KEY);document.getElementById('loginForm').addEventListener('submit',async e=>{e.preventDefault();status('Connexion…');const email=document.getElementById('email').value;const password=document.getElementById('password').value;const {error}=await db.auth.signInWithPassword({email,password});document.getElementById('password').value='';if(error){status('Connexion refusée : '+error.message);return}await refreshAuth();status(admin?'Connecté en administrateur.':'Ce compte n’est pas autorisé à modifier les dinos.')});document.getElementById('logoutBtn').addEventListener('click',async()=>{await db.auth.signOut();await refreshAuth();status('Déconnecté.')});document.getElementById('groupForm').addEventListener('submit',async e=>{e.preventDefault();if(!admin)return;const name=document.getElementById('groupName').value.trim();if(!name)return;const {error}=await db.from('dino_groups').insert({name});if(error){status('Erreur : '+error.message);return}document.getElementById('groupName').value='';status('Groupe créé !');await loadGroups()});await refreshAuth()}
+init().catch(e=>status('Erreur : '+e.message));
 </script>
 </body>
 </html>
