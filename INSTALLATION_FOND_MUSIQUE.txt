@@ -1,0 +1,11 @@
+INSTALLATION TOTORINA — FOND MUSICAL
+
+1. Décompresse ce ZIP.
+2. Ouvre https://github.com/toto-rina14/totorina
+3. Add file > Upload files.
+4. Ajoute MES MUSIQUES.html et fond-musique-totorina.webp.
+5. Commit changes.
+6. Ouvre https://toto-rina14.github.io/totorina/MES%20MUSIQUES.html
+7. Ctrl + F5 pour actualiser.
+
+IMPORTANT : conserve les autres fichiers du dépôt, notamment tes MP3 et banniere-musique-totorina.webp. Le lecteur, les titres, et l'administration Supabase sont conservés.
