@@ -1,5 +1,7 @@
-1. Ouvrir le dépôt GitHub toto-rina14/totorina.
-2. Ajouter les deux fichiers index.html et banniere-concours-totorina.png à la racine du dépôt.
-3. Valider avec Commit changes.
-4. La bannière en haut de la page sera cliquable et ouvrira MINI JEU.html.
-Ne pas supprimer les autres fichiers du site.
+TOTORINA - INSTALLATION
+1. Sur GitHub, ouvre ton depot toto-rina14/totorina.
+2. Add file > Upload files.
+3. Envoie MES MUSIQUES.html et banniere-musique-totorina-nouvelle.webp dans la racine du depot.
+4. Commit changes.
+5. Ouvre la page MES MUSIQUES.html et actualise avec Ctrl+F5.
+Les MP3, le fond existant et Supabase ne sont pas modifies.
