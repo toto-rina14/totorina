@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>TOTORINA — Mes musiques</title>
+<style>
+:root{color-scheme:dark}*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(ellipse at top,#381457,#090716 70%);color:#fff;font:16px system-ui,Arial,sans-serif}main{max-width:850px;margin:auto;padding:30px 18px}a{color:#9cddff}h1{color:#ff4dce;font-size:clamp(2rem,6vw,3.3rem)}.card{background:#211532;border:1px solid #694080;border-radius:20px;padding:24px;box-shadow:0 12px 40px #0005}.art{height:170px;border-radius:16px;display:grid;place-items:center;font-size:70px;background:linear-gradient(130deg,#6228a5,#df299c)}h2{margin-bottom:6px}.muted{color:#cfc2e2}audio{width:100%;margin-top:20px}button{background:#ee44c6;color:#18091f;border:0;border-radius:12px;padding:12px 18px;font:inherit;font-weight:700;cursor:pointer}button:focus-visible,a:focus-visible{outline:3px solid #75dfff;outline-offset:3px}.song{display:flex;justify-content:space-between;align-items:center;gap:15px;flex-wrap:wrap;padding:15px 0;border-top:1px solid #58446c}.note{margin-top:24px;color:#cfc2e2;font-size:.9rem}
+</style>
+</head>
+<body><main>
+<a href="index.html">← Retour à TOTORINA</a>
+<h1>🎵 MES MUSIQUES</h1>
+<p class="muted">Les sons créés par Totorina — univers ARK</p>
+<section class="card">
+<div class="art" aria-hidden="true">🎧🦖</div>
+<h2 id="songTitle">Totorina et la Lost Colony</h2>
+<p class="muted">TOTORINA • ARK: Lost Colony</p>
+<audio id="player" controls preload="metadata"><source src="https://toto-rina14.github.io/totorina/Totorina%20et%20la%20Lost%20Colony.mp3" type="audio/mpeg">Ton navigateur ne prend pas en charge la lecture audio.</audio>
+<div class="song"><span>🎶 Totorina et la Lost Colony</span><button type="button" id="playBtn">▶ Écouter</button></div>
+<p id="error" role="status" aria-live="polite"></p><p class="note">Si le lecteur ne fonctionne pas, <a href="https://toto-rina14.github.io/totorina/Totorina%20et%20la%20Lost%20Colony.mp3" target="_blank" rel="noopener">ouvre directement la musique ici</a>.</p>
+</section>
+<p class="note">La lecture démarre uniquement quand tu appuies sur Lecture. Pour ajouter d'autres titres, il faudra publier leurs fichiers MP3 et mettre à jour cette page. Les visiteurs ne peuvent pas modifier les fichiers de ton site.</p>
+</main>
+<script>
+const player=document.getElementById('player'),btn=document.getElementById('playBtn'),error=document.getElementById('error');
+btn.addEventListener('click',async()=>{try{if(player.paused)await player.play();else player.pause()}catch(e){error.textContent='Lecture impossible. Vérifie que le fichier MP3 est bien sur GitHub.'}});
+player.addEventListener('play',()=>btn.textContent='⏸ Pause');
+player.addEventListener('pause',()=>btn.textContent='▶ Écouter');
+player.addEventListener('error',()=>error.textContent='Impossible de charger le MP3. Essaie le lien direct ci-dessus ou recharge la page avec Ctrl + F5.');
+</script></body></html>
