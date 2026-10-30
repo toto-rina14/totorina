@@ -1,0 +1,76 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TOTORINA - DINO LVL 1</title>
+<style>
+body {
+  background: #090716;
+  color: white;
+  font-family: Arial, sans-serif;
+  text-align: center;
+  padding: 40px 15px;
+}
+h1 { color: #ff32c8; }
+a { color: #17baff; }
+button {
+  padding: 12px 20px;
+  background: #ff32c8;
+  color: white;
+  border: 0;
+  border-radius: 10px;
+  cursor: pointer;
+}
+input { padding: 12px; border-radius: 8px; }
+.groupe {
+  background: #201733;
+  padding: 15px;
+  margin: 15px auto;
+  border-radius: 12px;
+  max-width: 500px;
+}
+</style>
+</head>
+<body>
+<a href="index.html">← Retour à TOTORINA</a>
+<h1>🦖 DINO LVL 1</h1>
+<p>Mes groupes de dinos ARK</p>
+<input id="nom" placeholder="Nom du groupe">
+<button onclick="ajouter()">Ajouter un groupe</button>
+<div id="groupes"></div>
+<script>
+let groupes = JSON.parse(localStorage.getItem("dinos") || "[]");
+function afficher() {
+  document.getElementById("groupes").innerHTML = "";
+  groupes.forEach((nom, i) => {
+    const div = document.createElement("div");
+    div.className = "groupe";
+    div.textContent = "🦖 " + nom + " ";
+    const bouton = document.createElement("button");
+    bouton.textContent = "Supprimer";
+    bouton.onclick = () => {
+      groupes.splice(i, 1);
+      sauvegarder();
+    };
+    div.appendChild(bouton);
+    document.getElementById("groupes").appendChild(div);
+  });
+}
+function sauvegarder() {
+  localStorage.setItem("dinos", JSON.stringify(groupes));
+  afficher();
+}
+function ajouter() {
+  const input = document.getElementById("nom");
+  const nom = input.value.trim();
+  if (!nom) return;
+  groupes.push(nom);
+  input.value = "";
+  sauvegarder();
+}
+afficher();
+</script>
+</body>
+</html>
