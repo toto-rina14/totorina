@@ -1,0 +1,9 @@
+INSTALLATION TOTORINA
+
+1. Ouvrir github.com/toto-rina14/totorina
+2. Envoyer MINI JEU.html et index.html a la racine du depot.
+3. Remplacer index.html existant par le nouveau.
+4. Commit changes. Attendre quelques minutes.
+5. Tester https://toto-rina14.github.io/totorina/MINI%20JEU.html
+
+Le record est conserve uniquement sur le navigateur du joueur. Pas de classement mondial.
