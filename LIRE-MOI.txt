@@ -1,0 +1,5 @@
+1. Ouvrir le dépôt GitHub toto-rina14/totorina.
+2. Ajouter les deux fichiers index.html et banniere-concours-totorina.png à la racine du dépôt.
+3. Valider avec Commit changes.
+4. La bannière en haut de la page sera cliquable et ouvrira MINI JEU.html.
+Ne pas supprimer les autres fichiers du site.
