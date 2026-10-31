@@ -1,5 +1,11 @@
-TOTORINA - musique accueil
-1. Envoyer index.html et ARK de Totorina.mp3 a la racine du depot GitHub.
-2. Remplacer index.html existant, puis Commit changes.
-3. Ctrl+F5 sur le site.
-La musique essaie de demarrer automatiquement avec le son. Les navigateurs peuvent bloquer cette lecture sans interaction : dans ce cas elle demarre au premier clic ou appui clavier.
+TOTORINA - NOUVEAU MINI-JEU SURVIE REX
+
+1. Ouvre https://github.com/toto-rina14/totorina
+2. Clique Add file puis Upload files.
+3. Envoie les DEUX fichiers de ce ZIP.
+4. IMPORTANT : renomme index_TOTORINA_NOUVEAU_JEU.html en index.html AVANT de l’envoyer (ou utilise le fichier index.html contenu dans ce ZIP).
+5. Clique Commit changes.
+6. Ouvre https://toto-rina14.github.io/totorina/ puis Ctrl+F5.
+
+Ne supprime aucun autre fichier : MINI JEU.html, MES MUSIQUES.html, DINO NIVEAU 1.html, MP3 et images restent en place.
+Le nouveau jeu a un record local au navigateur, pas de classement public Supabase et ne compte pas pour le concours existant.
