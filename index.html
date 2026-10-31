@@ -22,6 +22,12 @@
 @keyframes contest-glow{from{box-shadow:0 0 10px #b82fff88}to{box-shadow:0 0 30px #e946fac2}}
 @media(max-width:760px){.contest-top{margin-top:85px;width:96%}.contest-top a{border-radius:10px}}
 @media(prefers-reduced-motion:reduce){.contest-top a{animation:none}}
+
+/* Musique d'accueil TOTORINA */
+.music-widget{position:fixed;right:14px;bottom:14px;z-index:100;display:flex;align-items:center;gap:10px;max-width:calc(100vw - 28px);padding:10px 13px;border:1px solid #59d5ff88;border-radius:14px;background:#100c24ed;box-shadow:0 7px 30px #0009;font-size:.84rem}
+.music-widget button{border:0;border-radius:9px;padding:9px 12px;background:linear-gradient(110deg,#ff32c8,#17baff);color:white;font-weight:800;cursor:pointer}
+.music-widget span{color:#eee5ff}
+@media(max-width:520px){.music-widget{left:10px;right:10px;justify-content:center}.music-widget span{font-size:.75rem}}
 </style>
 </head>
 <body>
@@ -32,5 +38,28 @@
 <section class="section" id="communaute"><div class="wrap"><div class="banner"><div class="kicker" style="color:#a7e7ff">💜 La communauté</div><h2>REJOINS LA TEAM TOTORINA !</h2><p>Rejoins Totorina, Jack et la tribu ZOMBI pour des aventures épiques ! Survis, dompte et domine avec nous sur ARK: Survival Ascended.</p><div class="actions" style="justify-content:center"><a class="btn discord-btn" href="https://discord.gg/MWzVxkST6" target="_blank" rel="noopener noreferrer">💬 REJOINDRE NOTRE DISCORD</a><a class="btn primary" href="https://www.twitch.tv/totorina1473" target="_blank" rel="noopener noreferrer">💜 REJOINDRE SUR TWITCH</a><a class="btn music-btn" href="MES%20MUSIQUES.html">🎵 MES MUSIQUES</a><a class="btn secondary" href="MINI%20JEU.html">🎮 JOUER AU MINI-JEU</a></div></div></div></section></main>
 <footer><div class="wrap foot"><div><strong>TOTORINA GAMING</strong> — Tous droits réservés © <span id="year"></span></div><div>Créé pour la passion du gaming 🎮</div></div></footer>
 <script>document.getElementById('year').textContent=new Date().getFullYear();const menu=document.getElementById('menu'),links=document.getElementById('links');menu.addEventListener('click',()=>{let open=links.classList.toggle('open');menu.setAttribute('aria-expanded',String(open))});links.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{links.classList.remove('open');menu.setAttribute('aria-expanded','false')}));/* Twitch embed: works when hosted on a public HTTPS domain. Twitch requires the real parent hostname. */if(location.protocol==='https:'&&location.hostname){const iframe=document.createElement('iframe');iframe.src='https://player.twitch.tv/?channel=totorina1473&parent='+encodeURIComponent(location.hostname)+'&muted=true';iframe.title='Live Twitch de Totorina';iframe.allowFullscreen=true;iframe.allow='autoplay; fullscreen';iframe.loading='lazy';document.getElementById('twitch-embed').replaceChildren(iframe)}</script>
+
+<audio id="introMusic" src="ARK%20de%20Totorina.mp3" preload="auto" loop></audio>
+<div class="music-widget" aria-label="Musique d'accueil">
+  <span id="musicLabel">🎵 ARK de Totorina</span>
+  <button id="musicToggle" type="button" aria-label="Lancer la musique">▶ Écouter</button>
+</div>
+<script>
+(function(){
+  const audio=document.getElementById('introMusic');
+  const button=document.getElementById('musicToggle');
+  const label=document.getElementById('musicLabel');
+  audio.volume=0.35;
+  function sync(){button.textContent=audio.paused?'▶ Écouter':'⏸ Pause';button.setAttribute('aria-label',audio.paused?'Lancer la musique':'Mettre la musique en pause');}
+  function tryPlay(){audio.play().then(sync).catch(()=>{label.textContent='🎵 Clique pour écouter';sync()});}
+  button.addEventListener('click',()=>{if(audio.paused){tryPlay()}else{audio.pause();sync()}});
+  audio.addEventListener('play',sync);audio.addEventListener('pause',sync);
+  // Les navigateurs peuvent bloquer le son automatique : on réessaie au premier geste.
+  function firstGesture(e){if(e.target.closest&&e.target.closest('#musicToggle'))return;if(audio.paused)tryPlay();}
+  document.addEventListener('pointerdown',firstGesture,{once:true});
+  document.addEventListener('keydown',firstGesture,{once:true});
+  tryPlay();
+})();
+</script>
 </body>
 </html>
