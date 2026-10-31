@@ -1,0 +1,7 @@
+1. Ouvrir https://github.com/toto-rina14/totorina
+2. Add file > Upload files
+3. Envoyer MINI JEU.html et fond-mini-jeu-tek.webp à la racine du dépôt
+4. Commit changes
+5. Ouvrir https://toto-rina14.github.io/totorina/MINI%20JEU.html et actualiser avec Ctrl+F5
+
+Le classement et les scores Supabase restent inchangés.
